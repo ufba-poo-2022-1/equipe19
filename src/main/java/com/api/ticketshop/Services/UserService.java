@@ -89,6 +89,41 @@ public class UserService {
         return false;
     }
 
+    @Transactional
+    public BillingAddressModel getUserAddress(String id) {
+        int intID = Integer.parseInt(id);
+        UserModel user = userRepository
+                            .findById(intID)
+                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No users with this id"));
+        return billingAddressRepository
+                            .findById(user.getBilling_address_id())
+                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No address with this id"));
+    }
+
+    @Transactional
+    public BillingAddressModel updateUserAddress(String userId, Map<Object, Object> fields){
+
+        int userIntId = Integer.parseInt(userId);
+
+        UserModel user = userRepository
+                .findById(userIntId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No users with this id"));
+
+        BillingAddressModel billingAddress = billingAddressRepository
+                .findById(user.getBilling_address_id())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No address with this id"));
+
+        fields.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(BillingAddressModel.class, key.toString());
+            assert field != null;
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, billingAddress, value);
+        });
+
+        return billingAddressRepository.save(billingAddress);
+
+    }
+
     private UserModel convertUserDTO(UserDTO userDTO, Integer lastBillingInsert){
 
         UserModel userModel = new UserModel();

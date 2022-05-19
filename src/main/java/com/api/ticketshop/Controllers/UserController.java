@@ -1,6 +1,7 @@
 package com.api.ticketshop.Controllers;
 
 import com.api.ticketshop.DTOs.UserDTO;
+import com.api.ticketshop.Models.BillingAddressModel;
 import com.api.ticketshop.Models.UserModel;
 import com.api.ticketshop.Repositories.BillingAddressRepository;
 import com.api.ticketshop.Services.UserService;
@@ -41,7 +42,7 @@ public class UserController {
         return users;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public Optional<UserModel> getUserByID(@PathVariable String id) {
 
         Optional<UserModel> user = userService.getUserByID(id);
@@ -70,6 +71,16 @@ public class UserController {
         if(!userService.deleteUserByID(id)){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An Error Ocurred when Deleting a User");
         };
+    }
+
+    @RequestMapping(value = "{id}/address", method = RequestMethod.GET)
+    public BillingAddressModel getUserAddress(@PathVariable String id){
+        return userService.getUserAddress(id);
+    }
+
+    @RequestMapping(value = "{userId}/address", method = RequestMethod.PATCH)
+    public BillingAddressModel updateUserAddress(@PathVariable String userId, @RequestBody  Map<Object, Object> fields) {
+        return userService.updateUserAddress(userId, fields);
     }
 
 }
