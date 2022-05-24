@@ -4,46 +4,36 @@ import com.sun.istack.NotNull;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
-public class UserModel {
+@Table(name = "event")
+public class EventModel implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /*@OneToMany
-    @JoinColumn(name = "billing_address_id")
-    private List<BillingAddressModel> billingAddress;*/
-
-    private Integer billing_address_id;
-
     private String name;
 
-    private String surname;
+    private String description;
 
-    private String email;
+    private Integer available_seates;
 
-    private String password;
+    private LocalDateTime date;
 
-    private String cpf;
+    private LocalDateTime start_time;
 
-    private String tel;
-
-    private Integer Type;
-
-    public Integer getBilling_address_id() {
-        return billing_address_id;
-    }
-
-    public void setBilling_address_id(Integer billing_address_id) {
-        this.billing_address_id = billing_address_id;
-    }
+    private LocalDateTime finish_time;
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,51 +44,43 @@ public class UserModel {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getAvailable_seates() {
+        return available_seates;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAvailable_seates(Integer available_seates) {
+        this.available_seates = available_seates;
     }
 
-    public String getPassword() {
-        return password;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
-    public String getCpf() {
-        return cpf;
+    public LocalDateTime getStart_time() {
+        return start_time;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setStart_time(LocalDateTime start_time) {
+        this.start_time = start_time;
     }
 
-    public String getTel() {
-        return tel;
+    public LocalDateTime getFinish_time() {
+        return finish_time;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public Integer getType() {
-        return Type;
-    }
-
-    public void setType(Integer type) {
-        Type = type;
+    public void setFinish_time(LocalDateTime finish_time) {
+        this.finish_time = finish_time;
     }
 }
