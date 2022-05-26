@@ -6,7 +6,9 @@ import com.api.ticketshop.Models.UserModel;
 import com.api.ticketshop.Repositories.BillingAddressRepository;
 import com.api.ticketshop.Repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +21,9 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
     private final BillingAddressRepository billingAddressRepository;
@@ -133,7 +138,7 @@ public class UserService {
         userModel.setSurname(userDTO.getSurname());
         userModel.setCpf(userDTO.getCpf());
         userModel.setEmail(userDTO.getEmail());
-        userModel.setPassword(userDTO.getPassword());
+        userModel.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userModel.setTel(userDTO.getTel());
         userModel.setType(userDTO.getType());
 
