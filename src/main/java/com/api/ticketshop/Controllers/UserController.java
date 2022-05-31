@@ -73,6 +73,11 @@ public class UserController {
         };
     }
 
+    @RequestMapping(value="/email/{email}", method = RequestMethod.GET)
+    public UserModel getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
+    }
+
     @RequestMapping(value = "{id}/address", method = RequestMethod.GET)
     public BillingAddressModel getUserAddress(@PathVariable String id){
         return userService.getUserAddress(id);

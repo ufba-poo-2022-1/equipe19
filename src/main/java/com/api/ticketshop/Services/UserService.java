@@ -35,6 +35,11 @@ public class UserService {
     }
 
     @Transactional
+    public UserModel getUserByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    @Transactional
     public List<UserModel> listAllUsers(){
         return (List<UserModel>) userRepository.findAll();
     }
