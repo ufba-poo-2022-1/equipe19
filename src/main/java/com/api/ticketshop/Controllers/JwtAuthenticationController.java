@@ -3,7 +3,9 @@ package com.api.ticketshop.Controllers;
 import com.api.ticketshop.Config.JwtTokenUtil;
 import com.api.ticketshop.Models.JwtRequest;
 import com.api.ticketshop.Models.JwtResponse;
+import com.api.ticketshop.Models.UserModel;
 import com.api.ticketshop.Services.JwtUserDetailsService;
+import com.api.ticketshop.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +30,19 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    private UserService userService;
+
+    public JwtAuthenticationController(UserService userService) {
+        this.userService = userService;
+    }
+
+
     @RequestMapping(value = "/v1/auth",  method = RequestMethod.POST)
     public ResponseEntity<?> auth(@RequestBody JwtRequest authRequest) throws Exception {
             authenticate(authRequest.getUsername(), authRequest.getPassword());
             final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-            final String token = jwtTokenUtil.generateToken(userDetails);
+            UserModel user = userService.getUserByEmail(authRequest.getUsername());
+            final String token = jwtTokenUtil.generateToken(userDetails, user.getId(), user.getType());
             return ResponseEntity.ok(new JwtResponse(token));
     }
 
