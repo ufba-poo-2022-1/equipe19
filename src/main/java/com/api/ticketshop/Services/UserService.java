@@ -1,5 +1,6 @@
 package com.api.ticketshop.Services;
 
+import com.api.ticketshop.Config.JwtTokenUtil;
 import com.api.ticketshop.DTOs.UserDTO;
 import com.api.ticketshop.Models.BillingAddressModel;
 import com.api.ticketshop.Models.UserModel;
@@ -24,6 +25,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     private final UserRepository userRepository;
     private final BillingAddressRepository billingAddressRepository;
@@ -148,6 +152,26 @@ public class UserService {
         userModel.setType(userDTO.getType());
 
         return userModel;
+    }
+
+    public boolean isAdmin(String token) {
+
+        String jwt = token.split(" ")[1];
+
+        return Integer.parseInt(jwtTokenUtil.getTypeFromToken(jwt)) == 2;
+
+    }
+
+    public String getUserIdFromToken(String token) {
+
+        if (token.isEmpty()) {
+            return " ";
+        }
+
+        String jwt = token.split(" ")[1];
+
+        return jwtTokenUtil.getIDFromToken(jwt);
+
     }
 
 
