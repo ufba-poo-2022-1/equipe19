@@ -15,3 +15,11 @@ A API está sendo desenvolvida com Java Spring Boot adotando-se o padrão de arq
 - [x] PATCH /users/{id} - Update user by id
 - [x] DELETE /users/{id} - Delete user by id
 
+## Rotas
+
+### Event
+- [x] POST /events - Create new event
+- [x] GET /events - Get all events
+- [x] GET /events/{id} - Get event by id
+- [x] PUT /events/{id} - Update event by id
+- [x] DELETE /events/{id} - Delete event by id
