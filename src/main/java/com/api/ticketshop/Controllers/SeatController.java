@@ -1,2 +1,23 @@
-package com.api.ticketshop.Controllers;public class SeatController {
+package com.api.ticketshop.Controllers;
+
+import com.api.ticketshop.Services.SeatService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/v1/seats")
+public class SeatController {
+
+    final SeatService seatService;
+
+    public SeatController(SeatService seatService) {
+        this.seatService = seatService;
+    }
+    
+
 }
