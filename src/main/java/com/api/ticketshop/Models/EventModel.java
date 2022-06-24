@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+
 @Entity
 @Table(name = "event")
 public class EventModel implements Serializable {
@@ -23,6 +25,9 @@ public class EventModel implements Serializable {
     private LocalTime start_time;
     @Column(nullable = false)
     private LocalTime finish_time;
+
+    @OneToMany(mappedBy = "event")
+    private List<SeatModel> seats;
 
     public Integer getId() {
         return id;

@@ -1,5 +1,6 @@
 package com.api.ticketshop.Models;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -20,6 +21,10 @@ public class SeatModel implements Serializable {
 
     @Column(nullable = false)
     private Integer price;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
+    private EventModel event;
 
     public Integer getId() {
         return id;
@@ -47,5 +52,13 @@ public class SeatModel implements Serializable {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public EventModel getEvent() {
+        return event;
+    }
+
+    public void setEvent(EventModel event) {
+        this.event = event;
     }
 }
