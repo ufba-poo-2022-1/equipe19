@@ -50,6 +50,11 @@ public class PurchaseService {
     }
 
     @Transactional
+    public Optional<PurchaseModel> getPurchaseModelByUserIdAndUserBillingAddressIdAndId(Integer userId, Integer userBillingAddressId, Integer purchaseId){
+        return purchaseRepository.findPurchaseModelByUserIdAndUserBillingAddressIdAndId(userId, userBillingAddressId, purchaseId);
+    }
+
+    @Transactional
     public boolean deletePurchaseById(String purchaseId) {
         if(purchaseRepository.findById(Integer.parseInt(purchaseId)).isPresent()){
             purchaseRepository.deleteById(Integer.parseInt(purchaseId));

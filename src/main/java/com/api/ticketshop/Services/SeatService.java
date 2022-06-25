@@ -1,16 +1,16 @@
 package com.api.ticketshop.Services;
 
+import com.api.ticketshop.Models.EventModel;
+import com.api.ticketshop.Models.PurchaseModel;
 import com.api.ticketshop.Models.SeatModel;
 import com.api.ticketshop.Repositories.SeatRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SeatService {
@@ -42,6 +42,16 @@ public class SeatService {
         seatRepository.deleteById(id);
     }
 
+    /**
+     * Method to find a seat by its id.
+     */
+    public Optional<SeatModel> getSeatByID(Integer id) {
+        return seatRepository.findById(id);
+    }
+
+    public Optional<SeatModel> getSeatModelByEventIdAndId(Integer eventId, Integer seatId){
+        return seatRepository.findSeatModelByEventIdAndId(eventId, seatId);
+    }
 
 
 }

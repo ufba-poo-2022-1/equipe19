@@ -57,6 +57,22 @@ public class SeatController {
         return seatService.getAllSeatsByEventID(Integer.parseInt(eventID));
     }
 
+
+    /**
+     * Method to list a specific seat by its id.
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getSeatByID(@PathVariable(value = "id") Integer id) {
+
+        Optional<SeatModel> seatModelOptional = seatService.getSeatByID(id);
+
+        if(seatModelOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event found with the given id");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(seatModelOptional.get());
+    }
+
     /**
      * Method to delete a specific seat by its id.
      */
