@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -42,11 +43,17 @@ public class SeatController {
             seatModel.setPrice(seatDTO.getPrice());
             seatModel.setEvent(eventModel);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(seatService.createNewSeat(seatModel));
+            return ResponseEntity.status(HttpStatus.CREATED).body(seatService.createNewSeat(seatModel, 3));
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event found with the given id");
 
     }
+
+    @GetMapping(value = "/event/{eventID}")
+    public List<SeatModel> getAllEventSeats(@PathVariable String eventID){
+        return seatService.getAllSeatsByEventID(Integer.parseInt(eventID));
+    }
+
 
 }

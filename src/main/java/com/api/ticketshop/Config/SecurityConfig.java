@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeRequests().antMatchers(HttpMethod.POST, "/v1/**").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.POST,"/v1/auth", "/v1/signup").permitAll()
+                .antMatchers(HttpMethod.GET, "/v1/events").permitAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -112,7 +112,7 @@ public class EventController {
     /**
      * Method to update a specific event by its id.
      */
-    @PutMapping("/{id}")
+    @PatchMapping ("/{id}")
     public ResponseEntity<Object> updateEvent (@PathVariable(value = "id") Integer id, @RequestBody @Valid EventDTO eventDTO){
 
         Optional<EventModel> eventModelOptional = eventService.getEventByID(id);
