@@ -56,4 +56,10 @@ public class SeatController {
     }
 
 
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteSeatByID(@PathVariable String id) {
+        seatService.deleteSeatByID(Integer.parseInt(id));
+    }
+
 }

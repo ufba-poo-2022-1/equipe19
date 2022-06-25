@@ -38,4 +38,10 @@ public class SeatService {
         return seatRepository.findByEventId(eventID);
     }
 
+    public void deleteSeatByID(Integer id) {
+        seatRepository.deleteById(id);
+    }
+
+
+
 }
