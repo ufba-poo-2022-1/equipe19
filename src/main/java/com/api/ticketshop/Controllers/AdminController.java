@@ -1,8 +1,10 @@
 package com.api.ticketshop.Controllers;
 
 import com.api.ticketshop.Models.BillingAddressModel;
+import com.api.ticketshop.Models.PurchaseModel;
 import com.api.ticketshop.Models.UserModel;
 import com.api.ticketshop.Repositories.BillingAddressRepository;
+import com.api.ticketshop.Services.PurchaseService;
 import com.api.ticketshop.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,12 @@ import java.util.Optional;
 public class AdminController {
 
     final UserService userService;
+    final PurchaseService purchaseService;
 
-    public AdminController(UserService userService){
+    public AdminController(UserService userService, PurchaseService purchaseService){
+
         this.userService = userService;
+        this.purchaseService = purchaseService;
     }
 
     @Autowired
@@ -30,7 +35,7 @@ public class AdminController {
     public List<UserModel> listAllUsers(@RequestHeader(name="Authorization") String token) {
 
         if(!userService.isAdmin(token)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No clients yet");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
         }
 
         List<UserModel> users = userService.listAllUsers();
@@ -46,7 +51,7 @@ public class AdminController {
     public Optional<UserModel> getUserByID(@PathVariable String id, @RequestHeader(name="Authorization") String token) {
 
         if(!userService.isAdmin(token)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No clients yet");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
         }
 
         Optional<UserModel> user = userService.getUserByID(id);
@@ -62,7 +67,7 @@ public class AdminController {
     public BillingAddressModel getUserAddress(@PathVariable String id, @RequestHeader(name="Authorization") String token){
 
         if(!userService.isAdmin(token)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No clients yet");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
         }
 
         return userService.getUserAddress(id);
@@ -72,7 +77,7 @@ public class AdminController {
     public UserModel updateUserInfo(@PathVariable String id, @RequestBody Map<Object, Object> fields, @RequestHeader(name="Authorization") String token) {
 
         if(!userService.isAdmin(token)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No clients yet");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
         }
 
         return userService.updateUserInfo(id, fields);
@@ -83,11 +88,36 @@ public class AdminController {
     public void deleteUserByID(@PathVariable String id, @RequestHeader(name="Authorization") String token)  {
 
         if(!userService.isAdmin(token)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No clients yet");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
         }
 
         if(!userService.deleteUserByID(id)){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An Error Ocurred when Deleting a User");
         };
+    }
+
+    @DeleteMapping(value = "/purchases/{purchaseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePurchaseById(@RequestHeader(name="Authorization") String token, @PathVariable String purchaseId){
+
+        if(!userService.isAdmin(token)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
+        }
+
+        if(!purchaseService.deletePurchaseById(purchaseId)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This purchase does not exist.");
+        }
+
+    }
+
+    @GetMapping(value = "/purchases")
+    public List<PurchaseModel> deletePurchaseById(@RequestHeader(name="Authorization") String token){
+
+        if(!userService.isAdmin(token)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not an admin.");
+        }
+
+        return purchaseService.getAllPlatformPurchases();
+
     }
 }

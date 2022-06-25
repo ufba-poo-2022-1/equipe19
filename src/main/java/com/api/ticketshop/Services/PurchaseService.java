@@ -4,7 +4,9 @@ import com.api.ticketshop.Models.PurchaseModel;
 import com.api.ticketshop.Models.UserModel;
 import com.api.ticketshop.Repositories.PurchaseRepository;
 import com.api.ticketshop.Repositories.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -45,5 +47,19 @@ public class PurchaseService {
     @Transactional
     public PurchaseModel getUserPurchaseByPurchaseId(String purchaseId, String userId){
         return purchaseRepository.findPurchaseModelByUserIdAndId(Integer.parseInt(userId), Integer.parseInt(purchaseId));
+    }
+
+    @Transactional
+    public boolean deletePurchaseById(String purchaseId) {
+        if(purchaseRepository.findById(Integer.parseInt(purchaseId)).isPresent()){
+            purchaseRepository.deleteById(Integer.parseInt(purchaseId));
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public List<PurchaseModel> getAllPlatformPurchases() {
+        return (List<PurchaseModel>) purchaseRepository.findAll();
     }
 }
