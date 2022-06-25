@@ -46,7 +46,7 @@ public class TicketController {
 
         if(seatModelOptional.isPresent() && purchaseModelOptional.isPresent()) {
             if(ticketService.getTicketModelBySeatId(ticketDTO.getSeat_id()).isPresent() || eventModelOptional.get().getAvailable_seates() == 0 ){
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("This seat is already in use");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("This seat is already in use or there are no seats available");
             }
             ticketModel.setSeatId(ticketDTO.getSeat_id());
             ticketModel.setSeatEventId(ticketDTO.getSeat_event_id());
