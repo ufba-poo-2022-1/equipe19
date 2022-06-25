@@ -53,5 +53,4 @@ public class SeatService {
         return seatRepository.findSeatModelByEventIdAndId(eventId, seatId);
     }
 
-
 }

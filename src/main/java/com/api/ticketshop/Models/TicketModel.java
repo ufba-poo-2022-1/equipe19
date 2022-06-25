@@ -13,19 +13,19 @@ public class TicketModel implements Serializable {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer seat_id;
+    private Integer seatId;
 
     @Column(nullable = false)
-    private Integer seat_event_id;
+    private Integer seatEventId;
 
     @Column(nullable = false)
-    private Integer purchase_id;
+    private Integer purchaseId;
 
     @Column(nullable = false)
-    private Integer purchase_user_id;
+    private Integer purchaseUserId;
 
     @Column(nullable = false)
-    private Integer purchase_user_billing_address_id;
+    private Integer purchaseUserBillingAddressId;
 
     @Column(nullable = false)
     private String type;
@@ -40,44 +40,44 @@ public class TicketModel implements Serializable {
         return id;
     }
 
-    public Integer getSeat_id() {
-        return seat_id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setSeat_id(Integer seat_id) {
-        this.seat_id = seat_id;
+    public void setSeatId(Integer seatId) {
+        this.seatId = seatId;
     }
 
-    public Integer getSeat_event_id() {
-        return seat_event_id;
+    public Integer getSeatEventId() {
+        return seatEventId;
     }
 
-    public void setSeat_event_id(Integer seat_event_id) {
-        this.seat_event_id = seat_event_id;
+    public void setSeatEventId(Integer seatEventId) {
+        this.seatEventId = seatEventId;
     }
 
-    public Integer getPurchase_id() {
-        return purchase_id;
+    public Integer getPurchaseId() {
+        return purchaseId;
     }
 
-    public void setPurchase_id(Integer purchase_id) {
-        this.purchase_id = purchase_id;
+    public void setPurchaseId(Integer purchaseId) {
+        this.purchaseId = purchaseId;
     }
 
-    public Integer getPurchase_user_id() {
-        return purchase_user_id;
+    public Integer getPurchaseUserId() {
+        return purchaseUserId;
     }
 
-    public void setPurchase_user_id(Integer purchase_user_id) {
-        this.purchase_user_id = purchase_user_id;
+    public void setPurchaseUserId(Integer purchaseUserId) {
+        this.purchaseUserId = purchaseUserId;
     }
 
-    public Integer getPurchase_user_billing_address_id() {
-        return purchase_user_billing_address_id;
+    public Integer getPurchaseUserBillingAddressId() {
+        return purchaseUserBillingAddressId;
     }
 
-    public void setPurchase_user_billing_address_id(Integer purchase_user_billing_address_id) {
-        this.purchase_user_billing_address_id = purchase_user_billing_address_id;
+    public void setPurchaseUserBillingAddressId(Integer purchaseUserBillingAddressId) {
+        this.purchaseUserBillingAddressId = purchaseUserBillingAddressId;
     }
 
     public String getType() {
