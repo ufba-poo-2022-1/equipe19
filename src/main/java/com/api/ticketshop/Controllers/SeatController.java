@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/seats")
@@ -29,7 +28,7 @@ public class SeatController {
 
     @PostMapping
     /**
-     * Method to save a new Seat.
+     * Method to save seats. The number of seats is given by 'available_seates' attribute of EventModel
      */
     public ResponseEntity<Object> newSeat(@RequestBody @Valid SeatDTO seatDTO){
         SeatModel seatModel = new SeatModel();
@@ -43,19 +42,24 @@ public class SeatController {
             seatModel.setPrice(seatDTO.getPrice());
             seatModel.setEvent(eventModel);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(seatService.createNewSeat(seatModel, 3));
+            return ResponseEntity.status(HttpStatus.CREATED).body(seatService.createNewSeat(seatModel, eventModel.getAvailable_seates()));
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event found with the given id");
 
     }
 
+    /**
+     * Method to list all seats by its eventID. Each event has its own seat list.
+     */
     @GetMapping(value = "/event/{eventID}")
     public List<SeatModel> getAllEventSeats(@PathVariable String eventID){
         return seatService.getAllSeatsByEventID(Integer.parseInt(eventID));
     }
 
-
+    /**
+     * Method to delete a specific seat by its id.
+     */
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteSeatByID(@PathVariable String id) {
