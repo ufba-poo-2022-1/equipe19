@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class TicketshopApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TicketshopApplication.class, args);
     }
