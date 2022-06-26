@@ -44,6 +44,10 @@ public class TicketModel implements Serializable {
         this.id = id;
     }
 
+    public Integer getSeatId() {
+        return seatId;
+    }
+
     public void setSeatId(Integer seatId) {
         this.seatId = seatId;
     }
