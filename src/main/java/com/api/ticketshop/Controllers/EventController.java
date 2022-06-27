@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Class that contains all endpoints of an Event
+ */
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/events")
@@ -28,15 +31,18 @@ public class EventController {
     /**
      * Class constructor that receives the Service Interface.
      * This constructor is actually a Dependency Injection Point.
+     * @param eventService
      */
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
-    @PostMapping
     /**
-     * Method to save a new Event.
+     * Method to creat a new Event.
+     * @param eventDTO
+     * @return ResponseEntity<Object>
      */
+    @PostMapping
     public ResponseEntity<Object> newEvent(@RequestBody @Valid EventDTO eventDTO){
         EventModel eventModel = new EventModel();
         BeanUtils.copyProperties(eventDTO, eventModel);
@@ -65,7 +71,8 @@ public class EventController {
     }
 
     /**
-     * Method to list all Events.
+     *  Method to list all Events.
+     * @return ResponseEntity<Object>
      */
     @GetMapping
     public ResponseEntity<Object> getAllEvents(){
@@ -81,6 +88,8 @@ public class EventController {
 
     /**
      * Method to list a specific event by its id.
+     * @param id
+     * @return ResponseEntity<Object>
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getEventByID(@PathVariable(value = "id") Integer id) {
@@ -96,6 +105,7 @@ public class EventController {
 
     /**
      * Method to delete a specific event by its id.
+     * @param id
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteEventById(@PathVariable(value = "id") Integer id){
@@ -112,6 +122,7 @@ public class EventController {
 
     /**
      * Method to update a specific event by its id.
+     * @param eventId
      */
 
     @PatchMapping("/{eventId}")

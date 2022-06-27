@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Class that contains all endpoints of an JwtAuthenticationController
+ */
 @RestController
 public class JwtAuthenticationController {
 
@@ -32,11 +35,20 @@ public class JwtAuthenticationController {
 
     private UserService userService;
 
+    /**
+     * Class constructor that receives the Service Interface.
+     * This constructor is actually a Dependency Injection Point.
+     * @param userService
+     */
     public JwtAuthenticationController(UserService userService) {
         this.userService = userService;
     }
 
-
+    /**
+     * Method that performs user authentication.
+     * @param authRequest
+     * @return ResponseEntity<?>
+     */
     @RequestMapping(value = "/v1/auth",  method = RequestMethod.POST)
     public ResponseEntity<?> auth(@RequestBody JwtRequest authRequest) throws Exception {
             authenticate(authRequest.getUsername(), authRequest.getPassword());
@@ -46,6 +58,10 @@ public class JwtAuthenticationController {
             return ResponseEntity.ok(new JwtResponse(token));
     }
 
+    /**
+     * Method that performs user login and logoff.
+     * @param username, password
+     */
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -54,9 +70,6 @@ public class JwtAuthenticationController {
         } catch (BadCredentialsException e) {
             throw new Exception("Invalid credentials", e);
         }
-
     }
-
-
 
 }

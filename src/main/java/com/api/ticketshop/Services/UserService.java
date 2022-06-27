@@ -13,13 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.transaction.Transactional;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Class that contains all the methods to make each endpoint of a User
+ */
 @Service
 public class UserService {
 
@@ -32,28 +34,51 @@ public class UserService {
     private final UserRepository userRepository;
     private final BillingAddressRepository billingAddressRepository;
 
+    /**
+     * Class constructor that receives the Repository Interface.
+     * This constructor is actually a Dependency Injection Point.
+     */
     public UserService(UserRepository userRepository, BillingAddressRepository billingAddressRepository) {
 
         this.userRepository = userRepository;
         this.billingAddressRepository = billingAddressRepository;
     }
 
+    /**
+     * Method to find a user by its email.
+     * @param email
+     * @return UserModel
+     */
     @Transactional
     public UserModel getUserByEmail(String email){
         return userRepository.findByEmail(email);
     }
 
+    /**
+     * Method to list all users.
+     * @return List<UserModel>
+     */
     @Transactional
     public List<UserModel> listAllUsers(){
         return (List<UserModel>) userRepository.findAll();
     }
 
+    /**
+     * Method to find a user by its id.
+     * @param id
+     * @return Optional<UserModel>
+     */
     @Transactional
     public Optional<UserModel> getUserByID(String id) {
         int intID = Integer.parseInt(id);
         return userRepository.findById(intID);
     }
 
+    /**
+     * Method to create a new User in the database.
+     * @param userDTO
+     * @return UserModel
+     */
     @Transactional
     public UserModel createNewUser(UserDTO userDTO) {
 
@@ -69,6 +94,11 @@ public class UserService {
 
     }
 
+    /**
+     * Method to update the user's data.
+     * @param id, fields
+     * @return UserModel
+     */
     @Transactional
     public UserModel updateUserInfo(String id, Map<Object, Object> fields)  {
 
@@ -86,10 +116,13 @@ public class UserService {
         });
 
         return userRepository.save(user);
-
     }
 
-
+    /**
+     * Method to delete a user by its id.
+     * @param id
+     * @return Boolean
+     */
     @Transactional
     public Boolean deleteUserByID(String id){
 
@@ -103,6 +136,11 @@ public class UserService {
         return false;
     }
 
+    /**
+     * Method to find the user's address.
+     * @param id
+     * @return BillingAddressModel
+     */
     @Transactional
     public BillingAddressModel getUserAddress(String id) {
         int intID = Integer.parseInt(id);
@@ -114,6 +152,11 @@ public class UserService {
                             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No address with this id"));
     }
 
+    /**
+     * Method to update the user's address.
+     * @param userId, fields
+     * @return BillingAddressModel
+     */
     @Transactional
     public BillingAddressModel updateUserAddress(String userId, Map<Object, Object> fields){
 
@@ -138,6 +181,11 @@ public class UserService {
 
     }
 
+    /**
+     * Method to convert UserDTO into UserModel.
+     * @param userDTO, lastBillingInsert
+     * @return UserModel
+     */
     private UserModel convertUserDTO(UserDTO userDTO, Integer lastBillingInsert){
 
         UserModel userModel = new UserModel();
@@ -154,14 +202,23 @@ public class UserService {
         return userModel;
     }
 
+    /**
+     * Method to check if the user is an admin or not.
+     * @param token
+     * @return boolean
+     */
     public boolean isAdmin(String token) {
 
         String jwt = token.split(" ")[1];
 
         return Integer.parseInt(jwtTokenUtil.getTypeFromToken(jwt)) == 2;
-
     }
 
+    /**
+     * Method to get the user's id from token.
+     * @param token
+     * @return String
+     */
     public String getUserIdFromToken(String token) {
 
         if (token.isEmpty()) {
@@ -171,8 +228,5 @@ public class UserService {
         String jwt = token.split(" ")[1];
 
         return jwtTokenUtil.getIDFromToken(jwt);
-
     }
-
-
 }

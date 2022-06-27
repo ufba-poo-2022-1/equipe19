@@ -9,7 +9,6 @@ import com.api.ticketshop.Services.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +18,22 @@ import java.util.UUID;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/tickets")
+
+/**
+ * Class that contains all endpoints of a Ticket
+ */
 public class TicketController {
 
     final TicketService ticketService;
     final SeatService seatService;
-
     final PurchaseService purchaseService;
     final EventService eventService;
 
-
+    /**
+     * Class constructor that receives the Service Interface.
+     * This constructor is actually a Dependency Injection Point.
+     * @param ticketService, seatService, purchaseService, eventService
+     */
     public TicketController(TicketService ticketService, SeatService seatService, PurchaseService purchaseService, EventService eventService) {
         this.ticketService = ticketService;
         this.seatService = seatService;
@@ -35,6 +41,11 @@ public class TicketController {
         this.eventService = eventService;
     }
 
+    /**
+     * Method to creat a new Ticket.
+     * @param ticketDTO
+     * @return ResponseEntity<Object>
+     */
     @PostMapping
     public ResponseEntity<Object> newTicket(@RequestBody @Valid TicketDTO ticketDTO){
         TicketModel ticketModel = new TicketModel();
@@ -72,6 +83,11 @@ public class TicketController {
 
     }
 
+    /**
+     *  Method to find all Tickets by user's id.
+     * @param userId
+     * @return ResponseEntity<Object>
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<Object> getTicketByUserID(@PathVariable(value = "userId") Integer userId) {
 
@@ -84,6 +100,12 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(ticketModelList);
     }
 
+
+    /**
+     *  Method to find all Tickets by event's id.
+     * @param eventId
+     * @return ResponseEntity<Object>
+     */
     @GetMapping("/event/{eventId}")
     public ResponseEntity<Object> getTicketByEventID(@PathVariable(value = "eventId") Integer eventId) {
 
@@ -96,6 +118,11 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(ticketModelList);
     }
 
+    /**
+     *  Method to find all Tickets by purchase's id.
+     * @param purchaseId
+     * @return ResponseEntity<Object>
+     */
     @GetMapping("/purchase/{purchaseId}")
     public ResponseEntity<Object> getTicketByPurchaseID(@PathVariable(value = "purchaseId") Integer purchaseId) {
 
@@ -110,6 +137,7 @@ public class TicketController {
 
     /**
      * Method to delete a specific ticket by its id.
+     * @param ticketId
      */
     @DeleteMapping("/{ticketId}")
     public ResponseEntity<Object> deleteEventById(@PathVariable(value = "ticketId") Integer ticketId){
@@ -132,6 +160,11 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body("Ticket deleted successfully");
     }
 
+    /**
+     * Method to update a specific ticket by its id.
+     * @param ticketId, fields
+     * @return TicketModel
+     */
     @PatchMapping("/{ticketId}")
     public TicketModel updateTicketModel(@PathVariable(value = "ticketId") Integer ticketId, @RequestBody Map<Object, Object> fields) {
         return ticketService.updateTicketModel(ticketId, fields);

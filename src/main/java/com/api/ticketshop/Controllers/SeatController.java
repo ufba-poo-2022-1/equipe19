@@ -16,20 +16,31 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/seats")
+
+/**
+ * Class that contains all endpoints of a Seat
+ */
 public class SeatController {
 
     final SeatService seatService;
     final EventService eventService;
 
+    /**
+     * Class constructor that receives the Service Interface.
+     * This constructor is actually a Dependency Injection Point.
+     * @param seatService, eventService
+     */
     public SeatController(SeatService seatService, EventService eventService) {
         this.seatService = seatService;
         this.eventService = eventService;
     }
 
-    @PostMapping
     /**
-     * Method to save seats. The number of seats is given by 'available_seates' attribute of EventModel
+     * Method to save a new Seat.
+     * @param seatDTO
+     * @return ResponseEntity<Object>
      */
+    @PostMapping
     public ResponseEntity<Object> newSeat(@RequestBody @Valid SeatDTO seatDTO){
         SeatModel seatModel = new SeatModel();
 
@@ -51,15 +62,18 @@ public class SeatController {
 
     /**
      * Method to list all seats by its eventID. Each event has its own seat list.
+     * @param eventID
+     * @return List<SeatModel>
      */
     @GetMapping(value = "/event/{eventID}")
     public List<SeatModel> getAllEventSeats(@PathVariable String eventID){
         return seatService.getAllSeatsByEventID(Integer.parseInt(eventID));
     }
 
-
     /**
      * Method to list a specific seat by its id.
+     * @param id
+     * @return ResponseEntity<Object>
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getSeatByID(@PathVariable(value = "id") Integer id) {
@@ -75,6 +89,7 @@ public class SeatController {
 
     /**
      * Method to delete a specific seat by its id.
+     * @param id
      */
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)

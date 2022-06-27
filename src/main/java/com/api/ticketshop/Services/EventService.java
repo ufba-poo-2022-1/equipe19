@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Class that contains all the methods to make each endpoint of an Event
+ */
 @Service
 public class EventService {
     final EventRepository eventRepository;
@@ -31,16 +34,19 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    @Transactional
     /**
      * Method to create an Event in the database.
+     * @param eventModel
+     * @return EventModel
      */
+    @Transactional
     public EventModel createNewEvent(EventModel eventModel) {
         return eventRepository.save(eventModel);
     }
 
     /**
      * Method to list all existing events in the database.
+     * @return List<EventModel>
      */
     public List<EventModel> listAllEvents() {
         return (List<EventModel>) eventRepository.findAll();
@@ -48,6 +54,8 @@ public class EventService {
 
     /**
      * Method to find an event by its id.
+     * @param id
+     * @return Optional<EventModel>
      */
     public Optional<EventModel> getEventByID(Integer id) {
         return eventRepository.findById(id);
@@ -55,12 +63,18 @@ public class EventService {
 
     /**
      * Method to delete an event.
+     * @param eventModel
      */
     @Transactional
     public void deleteEvent(EventModel eventModel) {
         eventRepository.delete(eventModel);
     }
 
+    /**
+     * Method to update an event by its id.
+     * @param eventId, fields
+     * @return EventModel
+     */
     @Transactional
     public EventModel updateEventModel(Integer eventId, Map<Object, Object> fields){
         EventModel eventModel = eventRepository
