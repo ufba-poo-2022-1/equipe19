@@ -1,20 +1,21 @@
 package com.api.ticketshop.DTOs;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class EventDTO {
 
-    @NotNull
+    @NotNull @NotEmpty
     private String name;
-    @NotNull
+    @NotNull @NotEmpty
     private String description;
     @NotNull
     private Integer available_seates;
-    @NotNull
+    @NotNull @NotEmpty
     private String date;
-    @NotNull
+    @NotNull @NotEmpty
     private String start_time;
-    @NotNull
+    @NotNull @NotEmpty
     private String finish_time;
 
     public String getName() {

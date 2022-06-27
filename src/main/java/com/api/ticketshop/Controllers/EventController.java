@@ -2,7 +2,6 @@ package com.api.ticketshop.Controllers;
 
 import com.api.ticketshop.DTOs.EventDTO;
 import com.api.ticketshop.Models.EventModel;
-import com.api.ticketshop.Models.TicketModel;
 import com.api.ticketshop.Services.EventService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;

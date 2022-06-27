@@ -3,6 +3,8 @@ package com.api.ticketshop.Models;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -20,8 +22,9 @@ public class PurchaseModel {
 
     private String hash;
 
+    @NotNull
     private Integer total;
-
+    @NotNull @NotEmpty
     private String status;
 
     private LocalDateTime creation_date;

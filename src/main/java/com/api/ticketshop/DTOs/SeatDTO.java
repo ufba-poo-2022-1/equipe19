@@ -1,5 +1,6 @@
 package com.api.ticketshop.DTOs;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class SeatDTO {
@@ -7,10 +8,10 @@ public class SeatDTO {
     @NotNull
     private Integer eventID;
 
-    @NotNull
+    @NotNull @NotEmpty
     private String name;
 
-    @NotNull
+    @NotNull @NotEmpty
     private String status;
 
     @NotNull

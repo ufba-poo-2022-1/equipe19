@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class PuchaseController {
     }
 
     @PostMapping
-    public void createPurchase(@RequestBody PurchaseModel purchase, @RequestHeader(name="Authorization") String token) {
+    public void createPurchase(@RequestBody @Valid PurchaseModel purchase, @RequestHeader(name="Authorization") String token) {
 
         String userId = userService.getUserIdFromToken(token);
 
