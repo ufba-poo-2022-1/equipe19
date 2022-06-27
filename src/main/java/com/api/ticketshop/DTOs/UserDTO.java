@@ -1,25 +1,27 @@
 package com.api.ticketshop.DTOs;
 
-import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class UserDTO {
 
     private Integer id;
-
+    @Valid
     private BillingAddressDTO address;
-
+    @NotNull @NotEmpty
     private String name;
-
+    @NotNull @NotEmpty
     private String surname;
-
+    @NotNull @NotEmpty
     private String email;
-
+    @NotNull @NotEmpty
     private String password;
-
+    @NotNull @NotEmpty
     private String cpf;
-
+    @NotNull @NotEmpty
     private String tel;
-
+    @NotNull
     private Integer Type;
 
     public Integer getId() {

@@ -13,11 +13,6 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    /*@OneToMany
-    @JoinColumn(name = "billing_address_id")
-    private List<BillingAddressModel> billingAddress;*/
-
     private Integer billing_address_id;
 
     private String name;
