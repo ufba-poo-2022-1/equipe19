@@ -82,6 +82,9 @@ public class EventService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No events found with this id"));
 
         fields.forEach((key, value) -> {
+            if (fields.containsKey("available_seates")){
+                throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "This attribute cannot be updated");
+            }
             if (fields.containsKey("date")){
                 DateTimeFormatter parserDate = new DateTimeFormatterBuilder()
                         .appendPattern("dd/MM/yyyy")

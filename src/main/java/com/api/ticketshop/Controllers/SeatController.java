@@ -8,18 +8,16 @@ import com.api.ticketshop.Services.SeatService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/v1/seats")
-
 /**
  * Class that contains all endpoints of a Seat
  */
+@RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/v1/seats")
 public class SeatController {
 
     final SeatService seatService;
@@ -90,11 +88,26 @@ public class SeatController {
     /**
      * Method to delete a specific seat by its id.
      * @param id
+     * @return ResponseEntity<Object>
      */
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void deleteSeatByID(@PathVariable String id) {
+    public ResponseEntity<Object> deleteSeatByID(@PathVariable String id) {
+        Optional<SeatModel> seatModelOptional = seatService.getSeatByID(Integer.parseInt(id));
+
+        if(seatModelOptional.get().getStatus().equals("n")){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This seat is in use");
+        }
+
+        if(seatModelOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No seat found with the given id");
+        }
+
+        EventModel eventModel = seatModelOptional.get().getEvent();
+        eventModel.setAvailable_seates(eventModel.getAvailable_seates()-1);
+
         seatService.deleteSeatByID(Integer.parseInt(id));
+        return ResponseEntity.status(HttpStatus.OK).body("Seat deleted successfully");
+
     }
 
 }

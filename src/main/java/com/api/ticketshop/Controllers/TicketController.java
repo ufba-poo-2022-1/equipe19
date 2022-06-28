@@ -15,13 +15,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/v1/tickets")
-
 /**
  * Class that contains all endpoints of a Ticket
  */
+@RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
+@RequestMapping("/v1/tickets")
 public class TicketController {
 
     final TicketService ticketService;
