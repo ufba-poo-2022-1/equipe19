@@ -2,7 +2,11 @@ package com.api.ticketshop.Controllers;
 
 import com.api.ticketshop.DTOs.EventDTO;
 import com.api.ticketshop.Models.EventModel;
+import com.api.ticketshop.Models.SeatModel;
+import com.api.ticketshop.Models.TicketModel;
 import com.api.ticketshop.Services.EventService;
+import com.api.ticketshop.Services.SeatService;
+import com.api.ticketshop.Services.TicketService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +32,17 @@ import java.util.Optional;
 @RequestMapping("/v1/events")
 public class EventController {
     final EventService eventService;
+    final TicketService ticketService;
+    final SeatService seatService;
     /**
      * Class constructor that receives the Service Interface.
      * This constructor is actually a Dependency Injection Point.
-     * @param eventService
+     * @param eventService, ticketService, seatService
      */
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, TicketService ticketService, SeatService seatService) {
         this.eventService = eventService;
+        this.ticketService = ticketService;
+        this.seatService = seatService;
     }
 
     /**
@@ -105,15 +113,25 @@ public class EventController {
 
     /**
      * Method to delete a specific event by its id.
-     * @param id
+     * @param eventId
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteEventById(@PathVariable(value = "id") Integer id){
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<Object> deleteEventById(@PathVariable(value = "eventId") Integer eventId){
 
-        Optional<EventModel> eventModelOptional = eventService.getEventByID(id);
+        Optional<EventModel> eventModelOptional = eventService.getEventByID(eventId);
+        List<TicketModel> ticketModelList = ticketService.getTicketModelByEventId(eventId);
+        List<SeatModel> seatModelList = seatService.getAllSeatsByEventID(eventId);
 
         if(eventModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event found with the given id");
+        }
+
+        if(ticketModelList.size() > 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This event cannot be deleted because there are tickets purchased for it");
+        }
+
+        if(seatModelList.size() > 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This event cannot be deleted");
         }
 
         eventService.deleteEvent(eventModelOptional.get());
@@ -124,7 +142,6 @@ public class EventController {
      * Method to update a specific event by its id.
      * @param eventId
      */
-
     @PatchMapping("/{eventId}")
     public EventModel updateEventModel(@PathVariable(value = "eventId") Integer eventId, @RequestBody Map<Object, Object> fields) {
         return eventService.updateEventModel(eventId, fields);
