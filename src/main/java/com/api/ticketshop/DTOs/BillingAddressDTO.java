@@ -1,19 +1,22 @@
 package com.api.ticketshop.DTOs;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class BillingAddressDTO {
 
     private Integer id;
-
+    @NotNull @NotEmpty
     private String street;
-
+    @NotNull @NotEmpty
     private String type;
-
+    @NotNull @NotEmpty
     private String number;
-
+    @NotNull @NotEmpty
     private String city;
-
+    @NotNull @NotEmpty
     private String state;
-
+    @NotNull @NotEmpty
     private String country;
 
     public Integer getId() {

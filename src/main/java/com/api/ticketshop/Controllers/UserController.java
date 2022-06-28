@@ -1,27 +1,32 @@
 package com.api.ticketshop.Controllers;
 
 import com.api.ticketshop.DTOs.UserDTO;
+import com.api.ticketshop.Models.BillingAddressModel;
 import com.api.ticketshop.Models.UserModel;
 import com.api.ticketshop.Repositories.BillingAddressRepository;
 import com.api.ticketshop.Services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Class that contains all endpoints of a User
+ */
 @RestController
 @RequestMapping("/v1/users")
 public class UserController {
 
     final UserService userService;
 
+    /**
+     * Class constructor that receives the Service Interface.
+     * This constructor is actually a Dependency Injection Point.
+     * @param userService
+     */
     public UserController(UserService userService){
         this.userService = userService;
     }
@@ -29,47 +34,80 @@ public class UserController {
     @Autowired
     private BillingAddressRepository billingAddressRepository;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public List<UserModel> listAllUsers() {
-
-        List<UserModel> users = userService.listAllUsers();
-
-        if(users.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No clients yet");
-        }
-
-        return users;
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Optional<UserModel> getUserByID(@PathVariable String id) {
-
-        Optional<UserModel> user = userService.getUserByID(id);
-
-        if(user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No client found with the given id");
-        }
-
-        return user;
-    }
-
+    /**
+     * Method to creat a new User.
+     * @param newUser
+     * @return UserModel
+     */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserModel createNewUser(@RequestBody UserDTO newUser) {
+    public UserModel createNewUser(@RequestBody @Valid UserDTO newUser) {
         return userService.createNewUser(newUser);
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.PATCH)
-    public UserModel updateUserInfo(@PathVariable String id, @RequestBody Map<Object, Object> fields) {
+    /**
+     * Method to update a specific User.
+     * @param fields, token
+     * @return UserModel
+     */
+    @RequestMapping(method = RequestMethod.PATCH)
+    public UserModel updateUserInfo(@RequestBody Map<Object, Object> fields, @RequestHeader(name="Authorization") String token) {
+
+        String id = userService.getUserIdFromToken(token);
+
+        if (id.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An Error Ocurred when Deleting a User");
+        }
+
         return userService.updateUserInfo(id, fields);
     }
 
-    @RequestMapping(value="{id}", method = RequestMethod.DELETE)
+    /**
+     * Method to delete a User by its id.
+     * @param token
+     */
+    @RequestMapping(method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUserByID(@PathVariable String id)  {
+    public void deleteUserByID(@RequestHeader(name="Authorization") String token)  {
+
+        String id = userService.getUserIdFromToken(token);
+
         if(!userService.deleteUserByID(id)){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An Error Ocurred when Deleting a User");
         };
+    }
+
+    /**
+     * Method to find the user's address by user's id.
+     * @param token
+     * @return BillingAddressModel
+     */
+    @RequestMapping(value = "address", method = RequestMethod.GET)
+    public BillingAddressModel getUserAddress(@RequestHeader(name="Authorization") String token){
+        String id = userService.getUserIdFromToken(token);
+        return userService.getUserAddress(id);
+    }
+
+    /**
+     * Method to update the user's address by user's id.
+     * @param fields, token
+     * @return BillingAddressModel
+     */
+    @RequestMapping(value = "address", method = RequestMethod.PATCH)
+    public BillingAddressModel updateUserAddress(@RequestBody  Map<Object, Object> fields, @RequestHeader(name="Authorization") String token) {
+        String id = userService.getUserIdFromToken(token);
+        return userService.updateUserAddress(id, fields);
+    }
+
+    /**
+     * Method to find a user by its id.
+     * @param token
+     * @return  Optional<UserModel>
+     */
+    @RequestMapping(value = "profile", method = RequestMethod.GET)
+    public Optional<UserModel> getUserProfile(@RequestHeader(name="Authorization") String token) {
+        String id = userService.getUserIdFromToken(token);
+        return userService.getUserByID(id);
     }
 
 }
